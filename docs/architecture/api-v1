@@ -1,0 +1,465 @@
+# SORA API v1.0
+
+## Objetivo
+
+Definir los endpoints principales de la API REST del backend de SORA.
+
+---
+
+# Convenciones
+
+## Respuesta Exitosa
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+## Respuesta de Error
+
+```json
+{
+  "success": false,
+  "message": "Descripción del error"
+}
+```
+
+---
+
+# AUTH
+
+## Iniciar Sesión
+
+POST /auth/login
+
+Request
+
+```json
+{
+  "email": "estudiante@sora.com",
+  "password": "password123"
+}
+```
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "jwt-token",
+    "user": {
+      "id": "uuid",
+      "firstName": "Juan",
+      "role": "STUDENT"
+    }
+  }
+}
+```
+
+---
+
+## Cerrar Sesión
+
+POST /auth/logout
+
+Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Recuperar Contraseña
+
+POST /auth/forgot-password
+
+Request
+
+```json
+{
+  "email": "estudiante@sora.com"
+}
+```
+
+---
+
+## Restablecer Contraseña
+
+POST /auth/reset-password
+
+Request
+
+```json
+{
+  "token": "recovery-token",
+  "password": "new-password"
+}
+```
+
+---
+
+# USERS
+
+## Obtener Perfil
+
+GET /users/me
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "email": "juan@sora.com",
+    "avatarId": "uuid"
+  }
+}
+```
+
+---
+
+## Actualizar Avatar
+
+PATCH /users/avatar
+
+Request
+
+```json
+{
+  "avatarId": "uuid"
+}
+```
+
+---
+
+# AVATARS
+
+## Obtener Avatares
+
+GET /avatars
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+# SIMULATIONS
+
+## Generar Simulacro
+
+POST /simulations/generate
+
+Simulacro Completo
+
+```json
+{
+  "type": "FULL",
+  "isTimed": true
+}
+```
+
+Simulacro por Área
+
+```json
+{
+  "type": "AREA",
+  "areaId": "uuid",
+  "isTimed": true
+}
+```
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "attemptId": "uuid",
+    "status": "IN_PROGRESS"
+  }
+}
+```
+
+---
+
+## Obtener Simulacro
+
+GET /simulations/:attemptId
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "status": "IN_PROGRESS",
+    "questions": []
+  }
+}
+```
+
+---
+
+## Guardar Respuesta
+
+POST /simulations/:attemptId/answer
+
+Request
+
+```json
+{
+  "questionId": "uuid",
+  "selectedOptionId": "uuid"
+}
+```
+
+Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Finalizar Simulacro
+
+POST /simulations/:attemptId/finish
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "score": 350,
+    "correctAnswers": 200,
+    "incorrectAnswers": 54
+  }
+}
+```
+
+---
+
+# WORKSHOPS
+
+## Obtener Talleres
+
+GET /workshops
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+## Obtener Taller
+
+GET /workshops/:id
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "title": "Álgebra Básica",
+    "questions": []
+  }
+}
+```
+
+---
+
+## Entregar Taller
+
+POST /workshops/:id/submit
+
+Request
+
+```json
+{
+  "answers": []
+}
+```
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "score": 90
+  }
+}
+```
+
+---
+
+# RESULTS
+
+## Historial de Resultados
+
+GET /results
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+## Resultado Individual
+
+GET /results/:id
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "score": 320,
+    "areas": []
+  }
+}
+```
+
+---
+
+# STATISTICS
+
+## Estadísticas Generales
+
+GET /statistics
+
+Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "bestScore": 365,
+    "averageScore": 310,
+    "attempts": 12
+  }
+}
+```
+
+---
+
+## Progreso Histórico
+
+GET /statistics/progress
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+## Estadísticas por Área
+
+GET /statistics/areas
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+## Estadísticas por Competencia
+
+GET /statistics/competencies
+
+Response
+
+```json
+{
+  "success": true,
+  "data": []
+}
+```
+
+---
+
+# ADMIN
+
+## Crear Usuario
+
+POST /admin/users
+
+Request
+
+```json
+{
+  "firstName": "Juan",
+  "lastName": "Pérez",
+  "email": "juan@sora.com"
+}
+```
+
+Response
+
+```json
+{
+  "success": true
+}
+```
+
+---
+
+## Obtener Usuarios
+
+GET /admin/users
+
+---
+
+## Importaciones OCR
+
+GET /admin/imports
+
+---
+
+# Estado
+
+Versión: 1.0
+
+Estado: Aprobado para desarrollo inicial.
